@@ -1,0 +1,9 @@
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:root {
+    --primary: #A5F1E9;
+}
