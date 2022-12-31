@@ -1,0 +1,56 @@
+{
+    "base_currency": "USD",
+    "currency": "ZAR",
+    "shipping_charge": 10,
+    "tax": 0.15,
+    "products": [
+        {
+            "img": "img/product-1.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "efe24000-c28f-478d-b07f-f5f5f2436962"
+        },
+        {
+            "img": "img/product-2.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "acdd792b-da13-453f-a1ee-2b7b1524586b"
+        },
+        {
+            "img": "img/product-3.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "3558ac6e-5094-453e-ab1d-8b0123666ecb"
+        },
+        {
+            "img": "img/product-4.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "cb039596-c9eb-4f69-a25a-ae3405ecdf3c"
+        },
+        {
+            "img": "img/product-5.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "f672c16f-61e3-413d-adf6-8c1a7f0fe43a"
+        },
+        {
+            "img": "img/product-6.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "03f05319-ee05-463c-bf94-f4bb6f731981"
+        },
+        {
+            "img": "img/product-7.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "d01f7ee6-8aa6-4a4f-908a-a44f67432d3d"
+        },
+        {
+            "img": "img/product-8.jpg",
+            "price": 124,
+            "name": "USB",
+            "productId": "254a2fdf-7a08-4dfd-b9fc-2d03c64d7ca1"
+        }
+    ]
+}

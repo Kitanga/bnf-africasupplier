@@ -15,7 +15,10 @@ $(function () {
             $this.prop("disabled", true);
 
             $.ajax({
-                url: "contact.php",
+                // url: "http://bnf-africasupliers-server.vercel.app/",
+                // url: "http://main--clinquant-semifreddo-e3688a.netlify.app/",
+                url: "https://bnf-server.onrender.com/",
+                // url: "http://localhost:8080",
                 type: "POST",
                 data: {
                     name: name,
