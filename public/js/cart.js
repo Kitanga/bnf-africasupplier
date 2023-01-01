@@ -1,8 +1,12 @@
 import { createApp } from 'vue'
 
 function initPayPalButton(app) {
-    if (!document.querySelector('#paypal-button-container')) return;
-    
+    if (document.querySelector('#paypal-button-container')) {
+        document.getElementById('paypal-button-container').innerHTML = ""
+    } else {
+        return;
+    }
+
     console.log('app fnc:', app?.getOrdersTotal)
     paypal.Buttons({
         style: {
@@ -14,46 +18,74 @@ function initPayPalButton(app) {
         },
 
         createOrder: function (data, actions) {
+            // const orders = app.orders.map(order => app.get)
+            const purchase_units = app.getPayPalOrders();
+            console.log(purchase_units)
+
             return actions.order.create({
-                purchase_units: [
-                    {
-                        "description": "Things I want to buy",
-                        "amount": {
-                            "currency_code": "USD",
-                            "value": 11.15,
-                            "breakdown": {
-                                "item_total": {
-                                    "currency_code": "USD",
-                                    "value": 1
-                                },
-                                "shipping": {
-                                    "currency_code": "USD",
-                                    "value": 10
-                                },
-                                "tax_total": {
-                                    "currency_code": "USD",
-                                    "value": 0.15
-                                }
-                            }
-                        }
-                    }]
+                purchase_units,
+                // #region [
+                //     {
+                //         "description": "Things I want to buy",
+                //         "amount": {
+                //             "currency_code": "USD",
+                //             "value": 11.15,
+                //             "breakdown": {
+                //                 "item_total": {
+                //                     "currency_code": "USD",
+                //                     "value": 1
+                //                 },
+                //                 "shipping": {
+                //                     "currency_code": "USD",
+                //                     "value": 10
+                //                 },
+                //                 "tax_total": {
+                //                     "currency_code": "USD",
+                //                     "value": 0.15
+                //                 }
+                //             }
+                //         }
+                //     }
+                // #endregion ]
             });
         },
 
         onApprove: function (data, actions) {
-            return actions.order.capture().then(function (orderData) {
+            // return actions.order.capture().then(async function (orderData) {
 
-                // Full available details
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            // Full available details
+            console.log('Data', data);
+            // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-                // Show a success message within this page, e.g.
-                const element = document.getElementById('paypal-button-container');
-                element.innerHTML = '';
-                element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            // Show a success message within this page, e.g.
+            // const element = document.getElementById('paypal-button-container');
+            // element.innerHTML = '';
+            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
 
-                // Or go to another URL:  actions.redirect('thank_you.html');
+            // Or go to another URL:  actions.redirect('thank_you.html');
 
-            });
+            (document.getElementById('preloader') ?? {}).style = "";
+
+            // First tell the server that the payment's been made
+            return fetch(`http://localhost:8080/api/orders/${data.orderID}/capture`, {
+                method: "POST",
+            }).then(resp => resp.json()).then(captureData => {
+                console.log('Capture Data:', captureData);
+                // When we get response from that we reset localStorage
+                localStorage.removeItem('orders')
+
+                // Now redirect to thank you page
+                location.href = 'thank-you.html'
+            })
+
+            // console.log('Capture Data:', captureData);
+
+            // When we get response from that we reset localStorage
+            // localStorage.removeItem('orders')
+
+            // Now redirect to thank you page
+            // actions.redirect('thank-you.html');
+            // });
         },
 
         onError: function (err) {
@@ -105,7 +137,7 @@ const initCart = async () => {
         },
         methods: {
             getExchangeRatePrice(price) {
-                return `${this.currency}${price.toFixed(2)}`
+                return `${this.base_currency}${(price * this.usdToZar).toFixed(2)}`
             },
             order(product, increment) {
                 const order = this.orders.find(order => order.productId === product.productId);
@@ -179,12 +211,74 @@ const initCart = async () => {
 
                 return subTotal;
             },
+            getOrdersTaxedAmount() {
+                return this.getOrdersSubtotal() * this.tax;
+            },
+            _getOrdersSubtotalWithTax() {
+                return this.getOrdersSubtotal() * this.tax;
+            },
             getOrdersTotal() {
-                const withoutTaxTotal = this.getOrdersSubtotal() + this.shippingCharge;
-                const total = withoutTaxTotal * this.tax + withoutTaxTotal
+                return this.getOrdersTaxedAmount() + this.getOrdersSubtotal() + this.shippingCharge;
+            },
+            getPayPalOrders() {
+                const total = this.getOrdersTotal();
+                const taxedAmount = this.getOrdersTaxedAmount();
+                const currency_code = productDetails.base_currency;
 
-                return total;
-            }
+                const paypalOrders = this.orders.map(order => {
+                    // First get products
+                    const product = this.getProduct(order.productId);
+
+                    const paypalOrder = {
+                        name: product.name,
+                        quantity: order.quantity.toString(),
+                        unit_amount: {
+                            currency_code,
+                            value: product.price.toFixed(2),
+                        },
+                        // tax: {
+                        //     currency_code,
+                        //     value: (order.quantity * this.tax).toFixed(2),
+                        // },
+                        category: 'PHYSICAL_GOODS',
+                    };
+
+                    return paypalOrder;
+                });
+
+                const payload = [
+                    {
+                        amount: {
+                            currency_code,
+                            value: total.toFixed(2),
+                            breakdown: {
+                                item_total: {
+                                    currency_code,
+                                    value: this.getOrdersSubtotal().toFixed(2),
+                                },
+                                tax_total: {
+                                    currency_code,
+                                    value: taxedAmount.toFixed(2),
+                                },
+                                shipping: {
+                                    currency_code,
+                                    value: this.shippingCharge,
+                                },
+                            },
+
+                        },
+                        items: paypalOrders
+                    }
+                ];
+
+                console.log('Payload:', payload)
+
+                console.log('check total validity:', total === this.getOrdersSubtotal() + taxedAmount + this.shippingCharge);
+                console.log('check subtotal validity:', this.getOrdersSubtotal().toFixed(2) === payload[0].items.map(item => parseInt(item.quantity) * parseFloat(item.unit_amount.value)).reduce((prev, curr) => prev + curr, 0).toFixed(2))
+                // console.log('check tax validity:', taxedAmount.toFixed(2), payload[0].items.map(item => parseFloat(item.tax.value)).reduce((prev, curr) => prev + curr, 0).toFixed(2))
+
+                return payload
+            },
         },
         mounted() {
             initPayPalButton(this);
@@ -193,7 +287,7 @@ const initCart = async () => {
             (document.getElementById('preloader') ?? {}).style = "display: none;";
         },
         updated() {
-            initPayPalButton(this);
+            // initPayPalButton(this);
         }
     }).mount('#app');
 }

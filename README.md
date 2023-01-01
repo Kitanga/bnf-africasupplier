@@ -11,5 +11,6 @@
 [x] Checkout page ui
 [x] Add vuejs
 [x] Add cart feature
-[ ] Add product buying
+[x] Add product buying
 [ ] Home page carousel needs to be updated
+[ ] Use Fez's account info for paypal

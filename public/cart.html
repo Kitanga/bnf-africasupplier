@@ -103,7 +103,7 @@
                         <tr v-for="orderItem in orders">
 
                             <td class="align-middle"><img :src="getProductImage(orderItem.productId)" alt="" style="width: 50px;"> {{getProductName(orderItem.productId)}}</td>
-                            <td class="align-middle">{{currency}}{{getProductPrice(orderItem.productId)}}</td>
+                            <td class="align-middle">{{currency}}{{getProductPrice(orderItem.productId)}} (~{{getExchangeRatePrice(getProductPrice(orderItem.productId))}})</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn" @click="order(getProduct(orderItem.productId), -1)">
@@ -131,11 +131,11 @@
                     <div class="border-bottom pb-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Subtotal</h6>
-                            <h6>{{currency}}{{getOrdersSubtotal()}}</h6>
+                            <h6>{{currency}}{{getOrdersSubtotal().toFixed(2)}}(~{{getExchangeRatePrice( getOrdersSubtotal() )}})</h6>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">{{currency}}{{shippingCharge}}</h6>
+                            <h6 class="font-weight-medium">{{currency}}{{shippingCharge.toFixed(2)}}(~{{getExchangeRatePrice( shippingCharge )}})</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Tax</h6>
@@ -145,7 +145,7 @@
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>{{currency}}{{getOrdersTotal()}}</h5>
+                            <h5>{{currency}}{{getOrdersTotal().toFixed(2)}}(~{{getExchangeRatePrice( getOrdersTotal() )}})</h5>
                         </div>
                         <!-- <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button> -->
                         <div id="smart-button-container">
@@ -207,7 +207,7 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AXOoU80rp_VI-k2FVWarVWz7ynbDht6qw9vkBFyo_gsKttJoUFOPsR-paSN5k2PgR-KzfW6-PCs1oMdD&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
 
     <script type="importmap">
         {
