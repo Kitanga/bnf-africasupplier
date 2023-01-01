@@ -67,7 +67,7 @@ function initPayPalButton(app) {
             (document.getElementById('preloader') ?? {}).style = "";
 
             // First tell the server that the payment's been made
-            return fetch(`http://localhost:8080/api/orders/${data.orderID}/capture`, {
+            return fetch(`https://bnf-server.onrender.com/api/orders/${data.orderID}/capture`, {
                 method: "POST",
             }).then(resp => resp.json()).then(captureData => {
                 console.log('Capture Data:', captureData);
