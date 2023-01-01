@@ -14,3 +14,5 @@
 [x] Add product buying
 [ ] Home page carousel needs to be updated
 [ ] Use Fez's account info for paypal
+[ ] Update render.com with Fez's paypal details
+[ ] Update website to use Fez's paypal client_id
