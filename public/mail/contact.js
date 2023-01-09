@@ -7,7 +7,7 @@ $(function () {
         submitSuccess: function ($form, event) {
             event.preventDefault();
             var name = $("input#name").val();
-            var email = '$("input#email").val()';
+            var email = $("input#email").val();
             var subject = $("input#subject").val();
             var message = $("textarea#message").val();
 
@@ -15,10 +15,7 @@ $(function () {
             $this.prop("disabled", true);
 
             $.ajax({
-                // url: "http://bnf-africasupliers-server.vercel.app/",
-                // url: "http://main--clinquant-semifreddo-e3688a.netlify.app/",
                 url: "https://bnf-server.onrender.com/",
-                // url: "http://localhost:8080",
                 type: "POST",
                 data: {
                     name: name,
