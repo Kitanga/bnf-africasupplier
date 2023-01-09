@@ -28,6 +28,15 @@
 </head>
 
 <body id="app">
+    <div id="preloader">
+        <span class="loader"></span>
+    </div>
+    <script>
+        window.onload = () => {
+            document.getElementById('preloader').style.display = 'none';
+        }
+    </script>
+    
     <!-- Topbar Start  -->
     <div class="container-fluid">
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
