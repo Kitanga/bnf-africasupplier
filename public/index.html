@@ -28,9 +28,9 @@
 </head>
 
 <body id="app">
-    <div id="preloader">
+    <!-- <div id="preloader">
         <span class="loader"></span>
-    </div>
+    </div> -->
 
     <!-- Topbar Start  -->
     <div class="container-fluid">
@@ -146,19 +146,8 @@
                             <h5>{{ currency }}{{ product.price.toFixed(2) }}<br/><span style="font-size: 1rem; color: var(--gray)">(~{{getExchangeRatePrice(product.price)}})</span></h5><h6 class="text-muted ml-2">
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn" @click="order(product, -1)">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" :value="getOrderQuantity(product.productId)">
-                                <div class="input-group-btn" @click="order(product, 1)">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" v-if="!orderExists(product)" @click="createOrder(product)">Add to Cart</button>
+                            <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" style="background-color: var(--red); color: var(--dark);" v-if="orderExists(product)" @click="createOrder(product)">Remove from Cart</button>
                         </div>
                     </div>
                 </div>

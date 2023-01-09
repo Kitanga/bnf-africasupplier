@@ -139,6 +139,16 @@ const initCart = async () => {
             getExchangeRatePrice(price) {
                 return `${this.base_currency}${(price * this.usdToZar).toFixed(2)}`
             },
+            createOrder(product) {
+                this.orders.push({
+                    productId: product.productId,
+                    quantity: 1,
+                })
+                localStorage.setItem('orders', JSON.stringify(this.orders));
+            },
+            orderExists(product) {
+                return !!this.orders.find(order => order.productId === product.productId);
+            },
             order(product, increment) {
                 const order = this.orders.find(order => order.productId === product.productId);
 

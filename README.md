@@ -12,6 +12,7 @@
 [x] Add vuejs
 [x] Add cart feature
 [x] Add product buying
+[ ] Add "Add to Cart" instead of "- # +" action combo on product list item
 [ ] Home page carousel needs to be updated
 [ ] Use Fez's account info for paypal
 [ ] Update render.com with Fez's paypal details
